@@ -1,0 +1,114 @@
+STR 4	//Parada de emergencia
+SET 164
+STR NOT 4
+AND NOT 3
+RST 164
+// Indicadores luminosos //
+STR NOT 27 //verde
+AND NOT 26 //rojo
+OUT 25 //parada
+STR NOT 164 //parada de emergencia
+AND 166    
+OUT 27   
+STR 164 
+OUT 26 
+STR 164
+AND 20
+AND NOT TMR 610
+OUT 24 //amarillo
+// Timers para que titile el amarillo //
+STR 164 
+AND NOT TMR 611
+TMR 610
+1
+STR 164
+AND TMR 610
+TMR 611
+1
+// Condiciones para volver a iniciar después de la parada de emergencia//
+STR 164 
+AND 5  //botón extra para el giro
+OUT 171  //deshabilita el giro durante la parada de emergencia
+STR 00 
+OR 166
+AND NOT 164
+OUT 166 //indicador de que se encendio la llave
+// Inicio de secuencia //
+STR 00
+OR 160
+AND NOT 162
+AND NOT 163
+AND NOT 164
+OUT 160  //B+ C+ - primera vuelta
+STR 160
+TMR 600 //Espero que salgan los cilindros para activar las pinzas
+2
+STR TMR 600 
+OR 23
+AND NOT 165
+AND NOT TMR 605 //Se abre cuando se cierra la pinza 24
+AND NOT 164
+OUT 23 //D+ - pinza 23
+STR 1  //Final de carrera
+OR 165 
+AND NOT TMR 601
+OUT 165 //Abre la pinza - Inicia timer para volver a cerrar 
+STR 23  
+AND NOT 165 
+TMR 602 //Espera 3 seg para que se cierre la pinza
+3 
+STR TMR 602  
+OR 162
+AND NOT 163
+AND NOT 164
+OUT 162 //B- C- - primera vuelta
+STR TMR 602 
+TMR 603 //Espero que vuelvan los cilindros
+2
+STR TMR 603  
+OR 20
+AND NOT TMR 607
+AND NOT 171
+OUT 20 //A+
+STR 20
+TMR 604 //Espero que se realice el giro
+3
+STR TMR 604
+OR 161
+AND NOT TMR 606
+AND NOT 163
+AND NOT 164
+OUT 161 //B+ C+ - segunda vuelta
+STR TMR 604 //Espero que salgan los cilindros
+TMR 605
+2
+STR TMR 605 //D- Condición para desactivar la pinza 23
+OR 17
+AND NOT 167
+AND NOT TMR 600
+AND NOT 164
+OUT 17 //E+ - pinza 24
+STR 2 //Final de carrera 
+OR 167 
+AND NOT TMR 601
+OUT 167 //Abre la pinza - Inicia timer para volver a cerrarla
+STR 17 //Espera 3 seg para que se cierre la pinza
+AND NOT 167
+TMR 606 //B- C- - Despues de que se cierren las pinzas
+3 
+STR TMR 606 //Espero para que vuelvan los cilindros
+TMR 607 //A-
+2
+STR 160 //Condiciones para el accionamiento de los cilindros de costado
+OR 161
+AND NOT 164
+OUT 21
+STR 21
+OUT 22
+STR 165 //Timer se activa con los finales de carrera
+OR 167
+TMR 601 //Para que se vuelvan a cerrar las pinzas
+3
+STR TMR 607 //Fin de un ciclo - Reinicia las variables para volver a iniciar
+AND 3
+OUT 163
