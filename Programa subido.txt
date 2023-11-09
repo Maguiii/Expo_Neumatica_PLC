@@ -4,27 +4,29 @@ STR NOT 4
 AND NOT 3
 RST 164
 // Indicadores luminosos //
-STR NOT 27 //verde
-AND NOT 26 //rojo
+STR NOT 164 
+AND NOT 27 
 OUT 25 //parada
-STR NOT 164 //parada de emergencia
-AND 166    
-OUT 27   
+STR 00
+AND NOT 172
+SET 27
+STR 164
+RST 27
 STR 164 
-OUT 26 
+AND NOT TMR 610
+OUT 26 //rojo
 STR 164
 AND 20
-AND NOT TMR 610
 OUT 24 //amarillo
 // Timers para que titile el amarillo //
 STR 164 
 AND NOT TMR 611
 TMR 610
-1
+0.5
 STR 164
 AND TMR 610
 TMR 611
-1
+0.5
 // Condiciones para volver a iniciar después de la parada de emergencia//
 STR 164 
 AND 5  //botón extra para el giro
@@ -39,6 +41,7 @@ OR 160
 AND NOT 162
 AND NOT 163
 AND NOT 164
+AND NOT 172 //Para que haya que reiniciar la llave despues de una parada de emrgencia
 OUT 160  //B+ C+ - primera vuelta
 STR 160
 TMR 600 //Espero que salgan los cilindros para activar las pinzas
@@ -112,3 +115,7 @@ TMR 601 //Para que se vuelvan a cerrar las pinzas
 STR TMR 607 //Fin de un ciclo - Reinicia las variables para volver a iniciar
 AND 3
 OUT 163
+STR 164 //Para que despues de la parada de emergencia la llave tenga que volver a iniciarse
+SET 172
+STR NOT 0
+RST 172
