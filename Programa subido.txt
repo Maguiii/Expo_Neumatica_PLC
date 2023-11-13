@@ -3,23 +3,25 @@ SET 164
 STR NOT 4
 AND NOT 3
 RST 164
-// Indicadores luminosos //
-STR NOT 164 
+STR NOT 164 // Indicadores luminosos // 
 AND NOT 27 
+AND 3
 OUT 25 //parada
 STR 00
 AND NOT 172
+AND NOT 173 
 SET 27
 STR 164
-RST 27
+OR 173 
+RST 
+27
 STR 164 
 AND NOT TMR 610
 OUT 26 //rojo
 STR 164
 AND 20
 OUT 24 //amarillo
-// Timers para que titile el amarillo //
-STR 164 
+STR 164 // Timers para que titile el amarillo // 
 AND NOT TMR 611
 TMR 610
 0.5
@@ -27,21 +29,20 @@ STR 164
 AND TMR 610
 TMR 611
 0.5
-// Condiciones para volver a iniciar después de la parada de emergencia//
-STR 164 
+STR 164 // Condiciones para volver a iniciar después de la parada de emergencia// 
 AND 5  //botón extra para el giro
 OUT 171  //deshabilita el giro durante la parada de emergencia
 STR 00 
 OR 166
 AND NOT 164
 OUT 166 //indicador de que se encendio la llave
-// Inicio de secuencia //
-STR 00
+STR 00 // Inicio de secuencia //
 OR 160
 AND NOT 162
 AND NOT 163
 AND NOT 164
 AND NOT 172 //Para que haya que reiniciar la llave despues de una parada de emrgencia
+AND NOT 173 //Para que haya que reiniciar la llave despues de una parada para recargar el cartucho 
 OUT 160  //B+ C+ - primera vuelta
 STR 160
 TMR 600 //Espero que salgan los cilindros para activar las pinzas
@@ -119,3 +120,11 @@ STR 164 //Para que despues de la parada de emergencia la llave tenga que volver 
 SET 172
 STR NOT 0
 RST 172
+STR 6  //El sensor cuenta la cantidad de piezas que se movieron
+STR 173
+CNT 612
+3
+STR CNT 612 //Cuando el cartucho esta lleno el ciclo no se reinicia, hay que volver a accionar la llave para que vuelva a funcionar
+SET 173
+STR NOT 0
+RST 173
